@@ -1,0 +1,21 @@
+body {
+  max-width: 50em;
+  font-family: Georgia;
+}
+
+.ProseMirror-menubar-wrapper {
+  border: 1px solid silver;
+  outline: none;
+}
+
+.ProseMirror {
+  padding: 5px 15px;
+}
+
+.ProseMirror-menuitem > .ProseMirror-icon.placeholder {
+  vertical-align: bottom;
+}
+
+.ProseMirror-menuitem > .ProseMirror-icon.placeholder > span {
+  vertical-align: top;
+}
