@@ -34,6 +34,7 @@ then
 
 ```
 import { CreateMark as CreatePlaceholderMark, ToggleMark as TogglePlaceholderMark, placeholder } from "prosemirror-placeholder-mark"
+import "prosemirror-placeholder-mark/dist/placeholder.css
 ```
 
 ### Exports
