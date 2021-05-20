@@ -49,7 +49,7 @@
   };
 
   Placeholder.prototype.clear = function () {
-    console.log('placeholder(clear)', placeholder);
+    console.log('placeholder(clear)');
     this.update();
   };
 
@@ -6867,7 +6867,7 @@
 
   // All other prosemirror plugins seem to be a callable func at the top level
 
-  function placeholder$1(markType) {
+  function placeholder(markType) {
     return new Plugin({
       key: new PluginKey("placeholder"),
       view: function(viewRef) { return new PlaceholderPlugin(markType) }
@@ -15638,7 +15638,7 @@
 
   // Generate the placeholder plugin and command from schema
   let togglePlaceholderCmd = togglePlaceholder(schema$1.marks.placeholder);
-  let placeholderPlugin = placeholder$1(schema$1.marks.placeholder);
+  let placeholderPlugin = placeholder(schema$1.marks.placeholder);
 
   // Keymappping
   let keymapOverride = { [hotkey]: false };
