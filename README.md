@@ -24,13 +24,27 @@ Come check us out at [prowritingaid.com](prowritingaid.com)!
 
 ## Documentation
 
+### Installation
+
+```
+npm install prosemirror-placeholder-mark
+```
+
+then
+
+```
+import { CreateMark as CreatePlaceholderMark, ToggleMark as TogglePlaceholderMark, placeholder } from "prosemirror-placeholder-mark"
+```
+
+### Exports
+
 The module exports:
 
-### `CreateMark(options ?: CreateMarkOptions) -> mark:<Mark>`
+#### `CreateMark(options ?: CreateMarkOptions) -> mark:<Mark>`
 
 The first thing you'll want to do is configure and create the placeholder mark, then add it to your schema.
 
-#### Interface
+##### Interface
 
 ```
 CreateMarkOptions {
@@ -39,12 +53,12 @@ CreateMarkOptions {
 }
 ```
 
-### `ToggleMark(mark: Mark) -> Command:<function>`
+#### `ToggleMark(mark: Mark) -> Command:<function>`
 
 Returns a command that can be used to apply the placeholder mark. A small extension to the internal ToggleMark from `prosemirror-commands`.
 
 Pass it to e.g. keymaps just like toggleMark
 
-### `placeholder(mark: Mark) -> Plugin:<instance>`
+#### `placeholder(mark: Mark) -> Plugin:<instance>`
 
 Returns the plugin code that has all the behaviour extensions to the prosemirror transaction/update cycle. Add it to the plugins section of your editor instance.
