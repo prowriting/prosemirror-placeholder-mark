@@ -22,8 +22,8 @@
   }
 
   var defaultOptions = {
-    className: "placeholder-mark",
-    activeClassName: "placeholder-mark--active"
+    className: "prosemirror-placeholder-mark",
+    activeClassName: "prosemirror-placeholder-mark--active"
   };
 
   var Placeholder = function(start, end) {
@@ -6901,7 +6901,7 @@
     }
   }
 
-  var css_248z = ".ProseMirror .placeholder-mark {\n  text-decoration: underline;\n  color: #aaaaaa;\n}\n\n.ProseMirror .placeholder-mark--active {\n  color: #cccccc;\n}\n";
+  var css_248z = ".ProseMirror .prosemirror-placeholder-mark {\n  text-decoration: underline;\n  color: #aaaaaa;\n}\n\n.ProseMirror .prosemirror-placeholder-mark--active {\n  color: #cccccc;\n}\n";
   styleInject(css_248z);
 
   var result = {};
