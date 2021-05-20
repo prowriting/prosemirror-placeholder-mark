@@ -1,6 +1,7 @@
 import buble from '@rollup/plugin-buble'
 import cleaner from "rollup-plugin-cleaner"
 import strip from '@rollup/plugin-strip'
+import copy from "rollup-plugin-copy"
 
 export default {
   input: './src/index.js',
@@ -18,6 +19,10 @@ export default {
       targets: [
         './dist/'
       ]
+    }),
+
+    copy({
+      targets: [{ src: "src/placeholder.css", dest: "dist" }]
     }),
 
     strip(),

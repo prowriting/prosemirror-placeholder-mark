@@ -1,3 +1,8 @@
+## 0.1.1
+
+- Added `placeholder.css` to dist to provide default styles
+- Updated default css classes
+
 ## 0.1.0
 
 ### Initial Release

@@ -17,6 +17,6 @@ export default function CreateMark(options = {}) {
 }
 
 const defaultOptions = {
-  className: "placeholder-mark",
-  activeClassName: "placeholder-mark--active"
+  className: "prosemirror-placeholder-mark",
+  activeClassName: "prosemirror-placeholder-mark--active"
 }

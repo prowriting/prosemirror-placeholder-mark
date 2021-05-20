@@ -1,8 +1,8 @@
-.ProseMirror .placeholder-mark {
+.ProseMirror .prosemirror-placeholder-mark {
   text-decoration: underline;
   color: #aaaaaa;
 }
 
-.ProseMirror .placeholder-mark--active {
+.ProseMirror .prosemirror-placeholder-mark--active {
   color: #cccccc;
 }
