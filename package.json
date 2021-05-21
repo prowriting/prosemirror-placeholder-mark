@@ -1,6 +1,6 @@
 {
   "name": "prosemirror-placeholder-mark",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Adds inline placeholder marks to ProseMirror",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
