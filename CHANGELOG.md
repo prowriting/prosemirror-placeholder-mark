@@ -1,3 +1,7 @@
+## 0.1.2
+
+- Updated type definitions in `index.d.ts`
+
 ## 0.1.1
 
 - Added `placeholder.css` to dist to provide default styles
