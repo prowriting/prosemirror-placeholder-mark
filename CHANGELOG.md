@@ -1,3 +1,7 @@
+## 0.1.3
+
+- Updated type definitions in `index.d.ts`
+
 ## 0.1.2
 
 - Updated type definitions in `index.d.ts`
