@@ -64,8 +64,8 @@
   },
   "scripts": {
     "demo": "rollup -w -c rollup.demo.config.js",
-    "test": "rollup -c && mocha test/test-*.js",
-    "test-watch": "rollup -c && mocha -w test/test-*.js",
+    "test": "rollup -c && mocha test/**/*.test.js",
+    "test-watch": "rollup -c && mocha -w test/**/*.test.js",
     "build": "rollup -c",
     "prepare": "npm run build",
     "deploy-pages": "rollup -c rollup.gh-pages.config.js && gh-pages -d demo_dist"
