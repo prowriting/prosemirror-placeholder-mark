@@ -53,8 +53,7 @@ function hasDocStateChanged(state, lastState) {
   return !(lastState && lastState.doc.eq(state.doc))
 }
 
-function shouldRunOnUpdate(view, lastState, mark, activePlaceholder) {
-  let { state } = view;
+function shouldRunOnUpdate(state, lastState, mark, activePlaceholder) {
   let { selection } = state
 
   // return if we don't get a valid cursor

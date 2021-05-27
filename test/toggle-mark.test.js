@@ -6,7 +6,7 @@ const { ToggleMark } = require('../dist')
 
 const command = ToggleMark(schema.marks.placeholder)
 
-function docTest(doc, opts = {}, result) {
+function docTest(doc, opts, result) {
   let stateOpts = { doc }
   if (opts.selection) {
     stateOpts.selection = new TextSelection(doc.resolve(opts.selection[0]), doc.resolve(opts.selection[1]))
@@ -20,7 +20,7 @@ function docTest(doc, opts = {}, result) {
   }
 }
 
-function stateTest(doc, opts = {}, accessorFunc, result, cmp = null) {
+function stateTest(doc, opts, accessorFunc, result, cmp = null) {
   let stateOpts = { doc }
   if (opts.selection) {
     stateOpts.selection = new TextSelection(doc.resolve(opts.selection[0]), doc.resolve(opts.selection[1]))
@@ -75,6 +75,14 @@ describe('ToggleMark', () => {
     docTest(
       docgen(p('hel', ph('lo'))),
       { selection: [4, 6] },
+      docgen(p('hello')),
+    )
+  })
+
+  it('does nothing with no selection', () => {
+    docTest(
+      docgen(p('hello')),
+      {},
       docgen(p('hello')),
     )
   })
