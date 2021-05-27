@@ -1,4 +1,4 @@
-// Type definitions for prosemirror-placeholder-mark 0.1.5
+// Type definitions for prosemirror-placeholder-mark 0.1.6
 // Project: https://github.com/prowriting/prosemirror-placeholder-mark
 // Definitions by: Richard Washer <https://github.com/rwasher>
 import { MarkType, MarkSpec } from "prosemirror-model"

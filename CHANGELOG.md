@@ -1,3 +1,8 @@
+## 0.1.6
+
+- Added test coverage
+- Moved plugin to the `appendTransaction` interface from the `view` interface as mocking the view interface without a full browser didn't seem to work and the plugin didn't even need access to the `view` in the end.
+
 ## 0.1.5
 
 - Updated type definitions in `index.d.ts`
