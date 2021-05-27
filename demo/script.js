@@ -61,19 +61,17 @@ let menuOptions = {
 // Get doc from initial HTML
 let doc = DOMParser.fromSchema(schema).parse(document.querySelector("#content"))
 
-// let ex = exampleSetup({ schema, menuContent: menu })
-// debugger;
-
 // Build Editor
 let state = EditorState.create({
   doc,
   plugins: [
     buildInputRules(schema),
     keymap(allKeymaps),
+    keymap(baseKeymap),
+    placeholderPlugin,
     dropCursor(),
     gapCursor(),
     menuBar(menuOptions),
-    placeholderPlugin,
     history()
   ]
 })

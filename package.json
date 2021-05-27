@@ -25,7 +25,6 @@
       "email": "tech@prowritingaid.com"
     }
   ],
-  "dependencies": {},
   "devDependencies": {
     "@rollup/plugin-buble": "^0.20.0",
     "@rollup/plugin-strip": "^2.0.1",
@@ -35,6 +34,7 @@
     "fast-glob": "^3.2.5",
     "gh-pages": "^3.1.0",
     "ist": "^1.1.1",
+    "lodash": "^4.17.21",
     "mocha": "^3.4.2",
     "postcss": "^8.2.15",
     "prosemirror-commands": "^1.1.1",
@@ -64,8 +64,8 @@
   },
   "scripts": {
     "demo": "rollup -w -c rollup.demo.config.js",
-    "test": "rollup -c && mocha test/test-*.js",
-    "test-watch": "rollup -c && mocha -w test/test-*.js",
+    "test": "rollup -c && mocha test/**/*.test.js",
+    "test-watch": "rollup -c && mocha -w test/**/*.test.js",
     "build": "rollup -c",
     "prepare": "npm run build",
     "deploy-pages": "rollup -c rollup.gh-pages.config.js && gh-pages -d demo_dist"

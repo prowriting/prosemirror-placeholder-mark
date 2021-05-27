@@ -4,20 +4,21 @@
 // This extended version is identical, but returns the transaction so it can be modified before dispatch
 import { rangeHasMark } from './helpers'
 import { TextSelection } from "prosemirror-state"
+const logging = false
 
 function togglePlaceholder(markType) {
   console.log('toggle-mark init', markType)
 
   return function (state, dispatch) {
-    console.log('toggle-mark()', { state, dispatch })
+    if (logging) console.log('toggle-mark()', { state, dispatch })
     let { selection } = state
     // Only run if we have a selection, as we don't want placeholder to be a stored mark
     if (selection.$cursor) {
-      console.log('toggle-mark() ❌ cursor mode, we dont want to add to stored marks')
+      if (logging) console.log('toggle-mark() ❌ cursor mode, we dont want to add to stored marks')
       return
     } else {
       if (dispatch) {
-        console.log('toggle-mark() toggling placeholder with dispatch')
+        if (logging) console.log('toggle-mark() toggling placeholder with dispatch')
         let tr = state.tr
         tr = toggleMarkTr(markType)(state, dispatch)(tr)
 
@@ -27,7 +28,7 @@ function togglePlaceholder(markType) {
         // If we find a placeholder inside the selection, move to the start of it
         // Note: We don't bother updating active, the next update will handle that
         if (rangeHasMark(tr.doc, markType, from, to)) {
-          console.log('toggle-mark() 🏁 we added a placeholder, move to start as well')
+          if (logging) console.log('toggle-mark() 🏁 we added a placeholder, move to start as well')
 
           let resolve = tr.doc.resolve(from)
           let selection = new TextSelection(resolve, resolve)
@@ -36,12 +37,12 @@ function togglePlaceholder(markType) {
 
         } else {
 
-          console.log('toggle-mark() 🏁 no placeholder added, no additional actions')
+          if (logging) console.log('toggle-mark() 🏁 no placeholder added, no additional actions')
           return dispatch(tr)
         }
 
       } else {
-        console.log('toggle-mark() 🏁 toggling placeholder without dispatch')
+        if (logging) console.log('toggle-mark() 🏁 toggling placeholder without dispatch')
         return toggleMarkTr(markType)(state)
       }
     }
