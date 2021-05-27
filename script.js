@@ -160,8 +160,7 @@
     return !(lastState && lastState.doc.eq(state.doc))
   }
 
-  function shouldRunOnUpdate(view, lastState, mark, activePlaceholder) {
-    var state = view.state;
+  function shouldRunOnUpdate(state, lastState, mark, activePlaceholder) {
     var selection = state.selection;
 
     // return if we don't get a valid cursor
@@ -6593,15 +6592,12 @@
     console.log('toggle-mark init', markType);
 
     return function (state, dispatch) {
-      console.log('toggle-mark()', { state: state, dispatch: dispatch });
       var selection = state.selection;
       // Only run if we have a selection, as we don't want placeholder to be a stored mark
       if (selection.$cursor) {
-        console.log('toggle-mark() ❌ cursor mode, we dont want to add to stored marks');
         return
       } else {
         if (dispatch) {
-          console.log('toggle-mark() toggling placeholder with dispatch');
           var tr = state.tr;
           tr = toggleMarkTr(markType)(state, dispatch)(tr);
 
@@ -6613,7 +6609,6 @@
           // If we find a placeholder inside the selection, move to the start of it
           // Note: We don't bother updating active, the next update will handle that
           if (rangeHasMark(tr.doc, markType, from, to)) {
-            console.log('toggle-mark() 🏁 we added a placeholder, move to start as well');
 
             var resolve = tr.doc.resolve(from);
             var selection$2 = new TextSelection(resolve, resolve);
@@ -6621,13 +6616,10 @@
             return dispatch(tr)
 
           } else {
-
-            console.log('toggle-mark() 🏁 no placeholder added, no additional actions');
             return dispatch(tr)
           }
 
         } else {
-          console.log('toggle-mark() 🏁 toggling placeholder without dispatch');
           return toggleMarkTr(markType)(state)
         }
       }
@@ -6741,33 +6733,39 @@
     this.activePlaceholder = new Placeholder();
   };
 
-  PlaceholderPlugin.prototype.update = function (view, lastState) {
-    console.log('plugin(update) ------------------------');
-    if (!shouldRunOnUpdate(view, lastState, this.markType, this.activePlaceholder)) { return }
+  PlaceholderPlugin.prototype.update = function (state, lastState) {
+    { console.log('plugin(update) ------------------------'); }
+    var selection = state.selection;
+    if (selection.$cursor) {
+      { console.log('plugin(update) pos', selection.$cursor.pos); }
+    } else {
+      { console.log('plugin(update) selection', selection.anchor, selection.head); }
+    }
 
-    var state = view.state;
+    var tr = state.tr;
+    if (!shouldRunOnUpdate(state, lastState, this.markType, this.activePlaceholder)) { return tr }
+
     var ref = state.selection.$cursor;
       var pos = ref.pos;
-    var dispatch = function (tr) {
-      console.log('plugin(dispatch)', tr);
-      return view.dispatch(tr)
+    var dispatch = function (t) {
+      // console.log('plugin(dispatch)', t)
+      return t
     };
-    var tr = state.tr;
 
-    console.log('plugin(update) run, pos:', pos, ', activePlaceholder:', this.activePlaceholder);
+    { console.log('plugin(update) run, pos:', pos, ', activePlaceholder:', this.activePlaceholder); }
 
     // Calculate the placeholder as determined by current position
     var placeholder = placeholderFromPos(tr.doc, this.markType, pos);
 
     // Everything is simple if the doc hasn't changed
     if (!hasDocStateChanged(state, lastState)) {
-      console.log('plugin(update) 🟢 doc has not changed');
+      { console.log('plugin(update) 🟢 doc has not changed'); }
 
       if (placeholder.posIsAdjacent(pos)) {
         if (!this.activePlaceholder.exists()) {
 
           // Moving into a placeholder without changing the doc
-          console.log('plugin(update) 🏁 no changes to doc, moving into placeholder from empty');
+          { console.log('plugin(update) 🏁 no changes to doc, moving into placeholder from empty'); }
           tr = tr.setMeta('addToHistory', false);
           tr = markRangeActivePlaceholder(tr, this.markType, placeholder.start, placeholder.end);
           this.activePlaceholder.replace(placeholder);
@@ -6779,7 +6777,7 @@
           // Edgecase: if we just removed a placeholder by selection, the activePlaceholder is invalid
           if (rangeHasMark(tr.doc, this.markType, this.activePlaceholder.start, this.activePlaceholder.end)) {
             // Next simplest: moving between placeholders (could be the same one)
-            console.log('plugin(update) 🏁 no changes to doc, moving between placeholders');
+            { console.log('plugin(update) 🏁 no changes to doc, moving between placeholders'); }
             tr = tr.setMeta('addToHistory', false);
             tr = markRangeInactivePlaceholder(tr, this.markType, this.activePlaceholder.start, this.activePlaceholder.end);
             this.activePlaceholder.clear();
@@ -6789,7 +6787,7 @@
             return dispatch(tr)
           } else {
             // Next simplest: moving between placeholders (could be the same one)
-            console.log('plugin(update) 🏁 no changes to doc, moving between placeholders with invalid activePlaceholder');
+            { console.log('plugin(update) 🏁 no changes to doc, moving between placeholders with invalid activePlaceholder'); }
             tr = tr.setMeta('addToHistory', false);
             this.activePlaceholder.clear();
             tr = markRangeActivePlaceholder(tr, this.markType, placeholder.start, placeholder.end);
@@ -6801,7 +6799,7 @@
       } else {
 
         // Moving the caret away from the active placeholder
-        console.log('plugin(update) 🏁 no changes to doc, no placeholder adjacency, moving to empty');
+        { console.log('plugin(update) 🏁 no changes to doc, no placeholder adjacency, moving to empty'); }
         tr = tr.setMeta('addToHistory', false);
         tr = markRangeInactivePlaceholder(tr, this.markType, this.activePlaceholder.start, this.activePlaceholder.end);
         this.activePlaceholder.clear();
@@ -6809,35 +6807,35 @@
       }
     }
 
-    console.log('plugin(update) 🟠 doc has changed');
+    { console.log('plugin(update) 🟠 doc has changed'); }
 
     // Calculate placeholder diff
     if (placeholder.eq(this.activePlaceholder)) {
-      console.log('plugin(update) ❌ no change in placeholder');
-      return
+      { console.log('plugin(update) ❌ no change in placeholder'); }
+      return tr
     } else {
-      console.log('plugin(update) placeholder has changed');
+      { console.log('plugin(update) placeholder has changed'); }
 
       // Case Group 1: Placeholder length has not changed
       if (placeholder.eqLength(this.activePlaceholder)) {
-        console.log('plugin(update) placeholder length has not changed');
+        { console.log('plugin(update) placeholder length has not changed'); }
 
         if (placeholder.isAfter(this.activePlaceholder)) {
-          console.log('plugin(update) 🏁 placeholder has moved later, removing placeholder');
+          { console.log('plugin(update) 🏁 placeholder has moved later, removing placeholder'); }
           tr = deleteRange(tr, placeholder.start, placeholder.end);
           return dispatch(tr)
         } else {
-          console.log('plugin(update) 🏁 placeholder has moved earlier, updating activePlaceholder');
+          { console.log('plugin(update) 🏁 placeholder has moved earlier, updating activePlaceholder'); }
           this.activePlaceholder.replace(placeholder);
-          return
+          return tr
         }
 
       } else {
         // Case Group 2: Placeholder length has changed
-        console.log('plugin(update) placeholder length has changed');
+        { console.log('plugin(update) placeholder length has changed'); }
 
         if (placeholder.posAtStart(pos)) {
-          console.log('plugin(update) 🏁 pos is at start, mark it active anyway');
+          { console.log('plugin(update) 🏁 pos is at start, mark it active anyway'); }
           tr = tr.setMeta('addToHistory', false);
           tr = markRangeActivePlaceholder(tr, this.markType, placeholder.start, placeholder.end);
           this.activePlaceholder.replace(placeholder);
@@ -6847,7 +6845,7 @@
 
           if (!this.activePlaceholder.exists()) {
             // This can happen if you backspace to the end of a placeholder
-            console.log('plugin(update) 🏁 pos is at end, no active placeholder, mark active at move to start');
+            { console.log('plugin(update) 🏁 pos is at end, no active placeholder, mark active at move to start'); }
             tr = markRangeActivePlaceholder(tr, this.markType, placeholder.start, placeholder.end);
             this.activePlaceholder.replace(placeholder);
             tr = moveCursorToPos(tr, placeholder.start);
@@ -6855,7 +6853,7 @@
 
           } else {
             // This can happen if the text that just got entered counted as inside the same textnode (start of line)
-            console.log('plugin(update) 🏁 pos is inside placeholder, delete after pos and unmark before');
+            { console.log('plugin(update) 🏁 pos is inside placeholder, delete after pos and unmark before'); }
             tr = deleteRange(tr, pos, placeholder.end);
             tr = removeMarkFromRange(tr, this.markType, placeholder.start, pos);
             return dispatch(tr)
@@ -6868,9 +6866,13 @@
   // All other prosemirror plugins seem to be a callable func at the top level
 
   function placeholder(markType) {
+    var plugin = new PlaceholderPlugin(markType);
     return new Plugin({
       key: new PluginKey("placeholder"),
-      view: function(viewRef) { return new PlaceholderPlugin(markType) }
+      // view(viewRef) { return plugin  },
+      appendTransaction: function(trs, oldState, state) {
+        return plugin.update(state, oldState)
+      }
     })
   }
 
@@ -13537,6 +13539,12 @@
   var mac$2 = typeof navigator != "undefined" ? /Mac/.test(navigator.platform)
             : typeof os != "undefined" ? os.platform() == "darwin" : false;
 
+  // :: Object
+  // Depending on the detected platform, this will hold
+  // [`pcBasekeymap`](#commands.pcBaseKeymap) or
+  // [`macBaseKeymap`](#commands.macBaseKeymap).
+  var baseKeymap = mac$2 ? macBaseKeymap : pcBaseKeymap;
+
   // :: (options: ?Object) → Plugin
   // Create a plugin that, when added to a ProseMirror instance,
   // causes a decoration to show up at the drop position when something
@@ -15664,19 +15672,17 @@
   // Get doc from initial HTML
   let doc$1 = DOMParser.fromSchema(schema$1).parse(document.querySelector("#content"));
 
-  // let ex = exampleSetup({ schema, menuContent: menu })
-  // debugger;
-
   // Build Editor
   let state = EditorState.create({
     doc: doc$1,
     plugins: [
       buildInputRules(schema$1),
       keymap(allKeymaps),
+      keymap(baseKeymap),
+      placeholderPlugin,
       dropCursor(),
       gapCursor(),
       menuBar(menuOptions),
-      placeholderPlugin,
       history()
     ]
   });
